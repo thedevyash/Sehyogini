@@ -1,5 +1,5 @@
 const express=require("express");
-// const jwt=require("jsonwebtoken");
+const jwt=require("jsonwebtoken");
 const User = require("../models/user");
 // const auth = require("../middlewares/auth");
 const authRouter=express.Router();
@@ -22,9 +22,9 @@ if(!user){
     });
     user=await user.save();
 }
-// const token= jwt.sign({id:user._id},"passwordKey");
+const token= jwt.sign({id:user._id},"passwordKey");
 
-res.json({user:user});
+res.json({user:user,token:token});
 
 }catch(e){
 res.status(500).json({error:e.message});
