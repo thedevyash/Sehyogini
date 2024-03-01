@@ -4,7 +4,7 @@ const User = require("../models/user");
 // const auth = require("../middlewares/auth");
 const authRouter=express.Router();
 
-authRouter.post('/signup',async (req,res)=>{
+authRouter.post('/api/signup',async (req,res)=>{
 try{
 const {name,email,profilePic,password,city,state}=req.body;
 
