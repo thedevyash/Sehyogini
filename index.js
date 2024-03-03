@@ -2,10 +2,13 @@ const express=require("express");
 const mongoose = require("mongoose");
 const http = require("http");
 const authRouter = require("./routes/auth");
+const postRouter = require("./routes/post");
+
 const PORT= process.env.PORT | 3001;
 const app =express();
 app.use(express.json());
 app.use(authRouter);
+app.use(postRouter);
 var server =http.createServer(app);
 
 server.listen(PORT,"0.0.0.0",()=>{

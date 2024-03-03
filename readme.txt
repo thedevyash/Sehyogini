@@ -27,3 +27,22 @@ req body-
 res{
     mssg,id
 }
+
+
+Create a POST(POST)-
+http://localhost:3001/api/createPost
+
+req body-
+{
+    title,author,content
+}
+
+
+Get a POST(GEt)-
+
+http://localhost:3001/api/getPosts
+
+req body-
+{
+    no body
+}
