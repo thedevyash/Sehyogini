@@ -21,6 +21,10 @@ const postSchema=(
     likes:{
         type:Array,
         require:false
+    },
+    images:{
+        type:mongoose.Schema.Types.ObjectId,
+        require:false
     }
     }
 );

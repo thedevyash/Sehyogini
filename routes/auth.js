@@ -78,6 +78,28 @@ authRouter.get('/api/getUsers',async(req,res)=>{
  
  });
 
+
+authRouter.get('/api/getUserByID/:id',async(req,res)=>{
+try{
+  userID=  req.params.id;
+
+  searchUser=await User.find({_id:userID});
+  console.log(searchUser);
+  if(searchUser)
+  {
+    return res.status(200).json({user:searchUser[0]});
+  }
+  else
+  {
+    return res.status(400).json({"mssg":"Nahi Mila"});
+  }
+}catch(e)
+{
+return res.status(500).json({"mssg":e.message})
+}
+});
+
+
 authRouter.get('/',async(req,res)=>{
 
    return res.status(200).json({"mssg":"Jai Shree Ram"});

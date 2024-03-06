@@ -63,11 +63,28 @@ postRouter.post("/api/do-comment", async (req,res) =>{
 
 
 postRouter.post("/api/do-like", async (req,res) =>{      
-    const like = new Like({name:req.body.name});
+    try{
+        const like = new Like({name:req.body.name});
     // await like.save();
+   var liked=await Post.findOne({_id:req.body.post,"likes":{"$elemMatch":{name:req.body.name}}});
+//    var status=liked.findOne({likes});
+//    liked=await Post.findOne({_id:req.body.post,'$and':{likes:like}})
+// console.log(status);
+   if(liked==null)
+{
     await Post.findOneAndUpdate({_id:req.body.post},{$push:{likes:like}} );
-    res.send("Like was added successfully");
-}) 
+    return res.status(200).json({"mssg":"Post was Liked Successfully"});
+}
+else
+{
+    await Post.findOneAndUpdate({_id:req.body.post},{$unset:{likes:like}} );
+return res.status(200).json({"mssg":"Post was Unliked Successfully"});
+}}catch(e)
+{
+return res.status(500).json({"mssg":e.message});
+}
+    
+}); 
 
 module.exports=postRouter;
 
