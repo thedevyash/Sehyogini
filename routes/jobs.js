@@ -3,6 +3,7 @@ const Job = require("../models/jobs");
 const User=require("../models/user")
 const mongoose = require("mongoose");
 const CategoryJobs=require('../models/categoryjobs');
+const { ObjectId } = require('mongodb');
 const jobsRouter=express.Router();
 
 jobsRouter.post('/api/createJob/:id',async(req,res)=>{
@@ -116,44 +117,78 @@ return  res.status(200).json({"mssg":"Applied Successfully!"});
 
 jobsRouter.get('/api/getJobByID/:id&:jobID',async(req,res)=>{
 try{
-  const {jobcategory}=req.body.jobCategory;
   var x="";
   if(req.body.jobCategory=="technology")
- x= await CategoryJobs.find(
-      {
-        _id: req.params.id,
-        "technology": { "$elemMatch": { _id: req.params.jobID}}
+  { x= await CategoryJobs.find(
+    {
+      _id: req.params.id,
+      "technology": { "$elemMatch": { _id: req.params.jobID}}
+    }
+  );
+    for (let i = 0; i < x[0]["technology"].length; i++) {
+      if(x[0]["technology"][i]._id==req.params.jobID)
+      return res.status(200).json({"job":x[0]["technology"][i]});
+    }
+  }
+
+   else if(req.body.jobCategory=="freelance")
+    {
+      x= await CategoryJobs.find(
+        {
+          _id: req.params.id,
+          "freelance": { "$elemMatch": { _id: req.params.jobID}}
+        }
+      );
+      for (let i = 0; i < x[0]["freelance"].length; i++) {
+        if(x[0]["freelance"][i]._id==req.params.jobID)
+        return res.status(200).json({"job":x[0]["freelance"][i]});
       }
-    );
-    if(req.body.jobCategory=="freelance")
-   x= await CategoryJobs.find(
-      {
-        _id: req.params.id,
-        "freelance": { "$elemMatch": { _id: req.params.jobID}}
-      }
-    );
-    if(req.body.jobCategory=="caregiving")
-  x=  await CategoryJobs.find(
+    
+    }
+  
+   else if(req.body.jobCategory=="caregiving")
+  {
+    x=  await CategoryJobs.find(
       {
         _id: req.params.id,
         "caregiving": { "$elemMatch": { _id: req.params.jobID}}
       }
     );
-    if(req.body.jobCategory=="philanthropy")
+    for (let i = 0; i < x[0]["caregiving"].length; i++) {
+      if(x[0]["caregiving"][i]._id==req.params.jobID)
+      return res.status(200).json({"job":x[0]["caregiving"][i]});
+    }
+  }
+  else  if(req.body.jobCategory=="philanthropy")
+ {
   x=  await CategoryJobs.find(
+    {
+      _id: req.params.id,
+      "philanthropy": { "$elemMatch": { _id: req.params.jobID}}
+    }
+   
+  );
+  for (let i = 0; i < x[0]["philanthropy"].length; i++) {
+    if(x[0]["philanthropy"][i]._id==req.params.jobID)
+    return res.status(200).json({"job":x[0]["philanthropy"][i]});
+  }
+ }
+   else if(req.body.jobCategory=="craftsmanship")
+   {
+    x =await CategoryJobs.find(
       {
         _id: req.params.id,
-        "philanthropy": { "$elemMatch": { _id: req.params.jobID}}
+        "craftsmanship": { "$elemMatch": { _id: req.params.jobID}}
       }
      
     );
-    if(req.body.jobCategory=="craftsmanship")
- x=  await CategoryJobs.findOne({
-  _id: req.params.id,
-  "craftsmanship._id":"65e800e749ee425b58e7ba7c"
-});
-    console.log(x);
-    return res.status(200).json({"job":x});
+  for (let i = 0; i < x[0]["craftsmanship"].length; i++) {
+    console.log(i);
+    if(x[0]["craftsmanship"][i]._id==req.params.jobID)
+    return res.status(200).json({"job":x[0]["craftsmanship"][i]});
+  }
+   }
+    
 }catch(e)
 {
   return res.status(500).json({"mssg":e.message});
