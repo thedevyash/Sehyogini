@@ -14,6 +14,10 @@ const postSchema=(
         require:true,
         type:String
     },
+    authorID:{
+require:true,
+type:mongoose.Schema.Types.ObjectId
+    },
     comments:
         {
             type:Array, ref:'Comment'

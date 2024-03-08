@@ -4,7 +4,7 @@ const authRouter=express.Router();
 
 authRouter.post('/api/signup',async (req,res)=>{
 try{
-const {name,email,phone,profilePic,password,city,state}=req.body;
+const {name,email,phone,profilePic,password,city,state,acctype}=req.body;
 
 let user=await User.findOne({phone:phone});
 
@@ -17,7 +17,8 @@ if(!user){
         profilePic:profilePic,
         password:password,
         city:city,
-        state:state
+        state:state,
+        acctype:acctype
     });
     user=await user.save();
     return res.status(200).json({id:user._id});

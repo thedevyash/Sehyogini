@@ -29,6 +29,30 @@ state:{
     type:String,
     required:true,
 },
+followBy:{
+    type:Array,
+    required:false
+},
+followTo:{
+    type:Array,
+    required:false
+},
+myposts:{
+type:Array,
+required:false
+},
+acctype:{
+type:String,
+required:true
+},
+jobsPosted:{
+    type:Array,
+required:false
+},
+jobsApplied:{
+    type:Array,
+required:false
+}
 
 });
 

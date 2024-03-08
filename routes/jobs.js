@@ -1,25 +1,42 @@
 const express=require("express");
 const Job = require("../models/jobs");
+const User=require("../models/user")
+const mongoose = require("mongoose");
 const CategoryJobs=require('../models/categoryjobs');
 const jobsRouter=express.Router();
 
 jobsRouter.post('/api/createJob/:id',async(req,res)=>{
 try{
-    const {jobtitle,company,jobcategory,applications,description,details}=req.body;
+    const {jobtitle,postedBy,jobcategory,applications,description,details}=req.body;
     job= new Job({
-        jobtitle,jobcategory,company,details,description,applications});
+        jobtitle,jobcategory,postedBy,details,description,applications});
         console.log(jobcategory);
         // var x=jobcategory;
         if(jobcategory=="technology")
+       {
         await CategoryJobs.findOneAndUpdate({_id:req.params.id},{$push:{technology:job}} );
+        await User.findOneAndUpdate({_id:postedBy},{$push:{jobsPosted:job}});
+      }
         else if(jobcategory=="freelance")
-        await CategoryJobs.findOneAndUpdate({_id:req.params.id},{$push:{freelance:job}} );
+        {
+          await CategoryJobs.findOneAndUpdate({_id:req.params.id},{$push:{freelance:job}} );
+        await User.findOneAndUpdate({_id:req.body.postedBy},{$push:{jobsPosted:job}});
+        }
         else if(jobcategory=="caregiving")
-        await CategoryJobs.findOneAndUpdate({_id:req.params.id},{$push:{caregiving:job}} );
+{
+  await CategoryJobs.findOneAndUpdate({_id:req.params.id},{$push:{caregiving:job}} );
+  await User.findOneAndUpdate({_id:req.body.postedBy},{$push:{jobsPosted:job}});
+}
         else if(jobcategory=="philanthropy")
-        await CategoryJobs.findOneAndUpdate({_id:req.params.id},{$push:{philanthropy:job}} );
+{
+  await CategoryJobs.findOneAndUpdate({_id:req.params.id},{$push:{philanthropy:job}} );
+  await User.findOneAndUpdate({_id:req.body.postedBy},{$push:{jobsPosted:job}});
+}
         else if(jobcategory=="craftsmanship")
-        await CategoryJobs.findOneAndUpdate({_id:req.params.id},{$push:{craftsmanship:job}} );
+     {
+      await CategoryJobs.findOneAndUpdate({_id:req.params.id},{$push:{craftsmanship:job}} );
+      await User.findOneAndUpdate({_id:req.body.postedBy},{$push:{jobsPosted:job}});
+     }
      
 
         return res.status(200).json({"mssg":"Job Posted Successfully","id":job._id});
@@ -42,6 +59,7 @@ try{
 jobsRouter.post('/api/applyJob/:id&:jobID',async(req,res)=>{
 try{
     const {id,jobcategory}=req.body;
+    const jobapplied={jobID:req.params.jobID,jobCategory:jobcategory};
 // j=await CategoryJobs.find({_id:req.params.id});
 if(jobcategory=="technology")
 // console.log(j[0]['technology']);
@@ -54,7 +72,8 @@ await CategoryJobs.findOneAndUpdate(
       "technology": { "$elemMatch": { _id: req.params.jobID}}
     },
     { "$push": { "technology.$.applications": id }} 
-  )
+  );
+  await User.findOneAndUpdate({_id:id},{$push:{jobsApplied:jobapplied}});
   if(jobcategory=="freelance")
   await CategoryJobs.findOneAndUpdate(
     {
@@ -91,6 +110,53 @@ return  res.status(200).json({"mssg":"Applied Successfully!"});
 }catch(e)
 {
     return res.status(500).json({"mssg":e.message});
+}
+});
+
+
+jobsRouter.get('/api/getJobByID/:id&:jobID',async(req,res)=>{
+try{
+  const {jobcategory}=req.body.jobCategory;
+  var x="";
+  if(req.body.jobCategory=="technology")
+ x= await CategoryJobs.find(
+      {
+        _id: req.params.id,
+        "technology": { "$elemMatch": { _id: req.params.jobID}}
+      }
+    );
+    if(req.body.jobCategory=="freelance")
+   x= await CategoryJobs.find(
+      {
+        _id: req.params.id,
+        "freelance": { "$elemMatch": { _id: req.params.jobID}}
+      }
+    );
+    if(req.body.jobCategory=="caregiving")
+  x=  await CategoryJobs.find(
+      {
+        _id: req.params.id,
+        "caregiving": { "$elemMatch": { _id: req.params.jobID}}
+      }
+    );
+    if(req.body.jobCategory=="philanthropy")
+  x=  await CategoryJobs.find(
+      {
+        _id: req.params.id,
+        "philanthropy": { "$elemMatch": { _id: req.params.jobID}}
+      }
+     
+    );
+    if(req.body.jobCategory=="craftsmanship")
+ x=  await CategoryJobs.findOne({
+  _id: req.params.id,
+  "craftsmanship._id":"65e800e749ee425b58e7ba7c"
+});
+    console.log(x);
+    return res.status(200).json({"job":x});
+}catch(e)
+{
+  return res.status(500).json({"mssg":e.message});
 }
 });
 

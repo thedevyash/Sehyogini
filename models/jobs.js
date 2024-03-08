@@ -5,8 +5,8 @@ jobtitle:{
     type:String,
     require:true,
 },
-company:{
-    type:String,
+postedBy:{
+    type:mongoose.Schema.Types.ObjectId,
     require:true
 },
 jobcategory:{
