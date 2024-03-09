@@ -1,5 +1,6 @@
 const express=require("express");
 const User = require("../models/user");
+const bcrypt=require("bcrypt");
 const authRouter=express.Router();
 
 authRouter.post('/api/signup',async (req,res)=>{
@@ -7,6 +8,8 @@ try{
 const {name,email,phone,profilePic,password,city,state,acctype}=req.body;
 
 let user=await User.findOne({phone:phone});
+const salt=await bcrypt.genSalt(10);
+const pswd=await bcrypt.hash(password,salt);
 
 if(!user){
 
@@ -15,7 +18,7 @@ if(!user){
         name:name,
         phone:phone,
         profilePic:profilePic,
-        password:password,
+        password:pswd,
         city:city,
         state:state,
         acctype:acctype
@@ -51,19 +54,21 @@ if(!user)
 }
 else
 {
-   
-    if(password==user['password'])
+  var result=await bcrypt.compare(password,user['password']);
+  console.log(result);
+    if(result)
     {
-        return res.status(200).json({"mssg":"Successfully Logged In","id":user._id})
+        return res.status(200).json({"mssg":"Successfully Logged In","id":user._id});
     }
     else{
+        console.log(result);
         return res.status(201).json({"mssg":"Wrong Password Entered"});
     }
 }
 }
 }catch(e)
 {
-    res.status(500).json({error:e.message});
+ return res.status(500).json({error:e.message});
 }
 });
 
