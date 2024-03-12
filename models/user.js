@@ -21,6 +21,10 @@ phone:{
     type:String,
     required:true,
 },
+dob:{
+    type:String,
+    required:true,
+},
 city:{
     type:String,
     required:true,
@@ -28,6 +32,10 @@ city:{
 state:{
     type:String,
     required:true,
+},
+details:{
+    type:Map,
+    required:true
 },
 followBy:{
     type:Array,

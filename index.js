@@ -7,6 +7,12 @@ const jobsRouter = require("./routes/jobs");
 
 const PORT= process.env.PORT | 3001;
 const app =express();
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 app.use(express.json());
 app.use(authRouter);
 app.use(postRouter);
