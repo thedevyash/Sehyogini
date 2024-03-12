@@ -42,7 +42,24 @@ postRouter.get('/api/getPosts',async(req,res)=>{
  }
  );
 
-
+ postRouter.get('/api/getPostByID/:id',async(req,res)=>{
+    try{
+      userID=  req.params.id;
+    
+      searchPost=await Post.find({_id:userID});
+      if(searchUser)
+      {
+        return res.status(200).json({user:searchUser[0]});
+      }
+      else
+      {
+        return res.status(400).json({"mssg":"Nahi Mila"});
+      }
+    }catch(e)
+    {
+    return res.status(500).json({"mssg":e.message})
+    }
+    });
 
 //  postRouter.post('/api/do-comment',async(req,res)=>{
 //     const {id,comment}=req.body;
