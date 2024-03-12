@@ -44,12 +44,12 @@ postRouter.get('/api/getPosts',async(req,res)=>{
 
  postRouter.get('/api/getPostByID/:id',async(req,res)=>{
     try{
-      userID=  req.params.id;
+      postID=  req.params.id;
     
-      searchPost=await Post.find({_id:userID});
-      if(searchUser)
+      searchPost=await Post.find({_id:postID});
+      if(searchPost)
       {
-        return res.status(200).json({user:searchUser[0]});
+        return res.status(200).json({user:searchPost[0]});
       }
       else
       {
