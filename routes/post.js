@@ -100,7 +100,7 @@ postRouter.post("/api/do-like", async (req,res) =>{
 else
 {
 
-  var xyz=  await Post.findOneAndUpdate({_id:req.body.post},{"likes":{$pull:{name:req.body.name}}});
+  var xyz=  await Post.findOneAndUpdate({_id:req.body.post},{$pull:{"likes":{name:req.body.name}}});
   console.log(xyz);
 return res.status(200).json({"mssg":"Post was Unliked Successfully"});
 }}catch(e)
