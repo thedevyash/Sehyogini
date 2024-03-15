@@ -8,7 +8,7 @@ schemeRouter.get('/api/getSchemes',async(req,res)=>{
     try{
         
        j=await Scheme.find({});
-       console.log(j);
+
      return  res.status(200).json(j);
     }catch(e)
     {
