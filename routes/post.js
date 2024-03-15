@@ -7,11 +7,11 @@ const User=require("../models/user");
 const postRouter=express.Router();
 
 postRouter.post('/api/createPost',async(req,res)=>{
-const {title,author,authorID,content,comments,likes}=req.body;
+const {title,author,authorID,content,comments,likes,authorType}=req.body;
 try{
     post=new Post({
         author:author,
-        authorID:authorID,
+        authorID:authorID,authorType:authorType,
         content:content,
         title:title,
         comments:comments,

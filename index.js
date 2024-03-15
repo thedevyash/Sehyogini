@@ -4,6 +4,7 @@ const http = require("http");
 const authRouter = require("./routes/auth");
 const postRouter = require("./routes/post");
 const jobsRouter = require("./routes/jobs");
+const schemeRouter = require("./routes/schemes");
 
 const PORT= process.env.PORT | 3001;
 const app =express();
@@ -18,7 +19,7 @@ app.use(authRouter);
 app.use(postRouter);
 app.use(jobsRouter);
 var server =http.createServer(app);
-
+app.use(schemeRouter);
 server.listen(PORT,"0.0.0.0",()=>{
     console.log(`server running at ${PORT}`)
 });

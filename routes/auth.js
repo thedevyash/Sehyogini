@@ -5,7 +5,7 @@ const authRouter=express.Router();
 
 authRouter.post('/api/signup',async (req,res)=>{
 try{
-const {name,email,phone,profilePic,dob,password,city,state,acctype}=req.body;
+const {name,email,phone,profilePic,dob,password,city,state,acctype,details}=req.body;
 
 let user=await User.findOne({phone:phone});
 const salt=await bcrypt.genSalt(10);
@@ -21,7 +21,7 @@ if(!user){
         password:pswd,
         city:city,
         state:state,
-        acctype:acctype,dob:dob
+        acctype:acctype,dob:dob,details:details
     });
     user=await user.save();
     return res.status(200).json({id:user._id});

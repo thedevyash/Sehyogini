@@ -10,6 +10,10 @@ const postSchema=(
         type:String,
         require:true
     },
+    authorType:{
+type:String,
+require:true
+    },
     author:{
         require:true,
         type:String
