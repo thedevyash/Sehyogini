@@ -74,7 +74,7 @@ console.log(filters);
             console.log(concept.name + " " + concept.value);
        
         }
-        if(filters['toxic']>0.75)
+        if(filters['toxic']>0.60||filters['insult']>0.50)
         return  res.status(200).json({"isposted":false});
         else
         { post=new Post({
@@ -213,10 +213,10 @@ postRouter.post("/api/do-comment", async (req,res) =>{
     
                 // filter.set(concept.name,concept.value);
              filters[concept.name]=concept.value;
-                console.log(concept.name + " " + concept.value);
+
            
             }
-            if(filters['toxic']>0.75)
+            if(filters['toxic']>0.60||filters['insult']>0.60)
             return  res.status(200).json({"isposted":false});
             else
             {  // await comment.save();
