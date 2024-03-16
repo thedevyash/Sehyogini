@@ -151,11 +151,92 @@ postRouter.get('/api/getPosts',async(req,res)=>{
 //     }
 //     });
     
-postRouter.post("/api/do-comment", async (req,res) =>{      
+postRouter.post("/api/do-comment", async (req,res) =>{  
+        
     const comment = new Comment({name:req.body.name, comment:req.body.comment});
+
+    var filters={};
+
+    try{
+
+        const PAT = 'f0926fb0e98942e6b5037257f571d473';
+    
+        const USER_ID = 'clarifai';
+        const APP_ID = 'main';
+        
+        const MODEL_ID = 'moderation-multilingual-text-classification';
+        const MODEL_VERSION_ID = '79c2248564b0465bb96265e0c239352b';
+        const RAW_TEXT = req.body.comment;
+        const { ClarifaiStub, grpc } = require("clarifai-nodejs-grpc");
+        
+        const stub = ClarifaiStub.grpc();
+        
+        const metadata = new grpc.Metadata();
+        metadata.set("authorization", "Key " + PAT);
+        
+    
+       
+       
+       await stub.PostModelOutputs(
+        {
+            user_app_id: {
+                "user_id": USER_ID,
+                "app_id": APP_ID
+            },
+            model_id: MODEL_ID,
+            version_id: MODEL_VERSION_ID, 
+            inputs: [
+                {
+                    "data": {
+                        "text": {
+                            "raw": RAW_TEXT
+    
+                        }
+                    }
+                }
+            ]
+        },
+        metadata,
+        async (err, response) => {
+            if (err) {
+                throw new Error(err);
+            }
+    
+            if (response.status.code !== 10000) {
+                throw new Error("Post model outputs failed, status: " + response.status.description);
+            }
+    
+            const output = response.outputs[0];
+    
+            console.log("Predicted concepts:");
+            for (const concept of output.data.concepts) {
+    
+                // filter.set(concept.name,concept.value);
+             filters[concept.name]=concept.value;
+                console.log(concept.name + " " + concept.value);
+           
+            }
+            if(filters['toxic']>0.75)
+            return  res.status(200).json({"isposted":false});
+            else
+            {  // await comment.save();
+                await Post.findOneAndUpdate({_id:req.body.post},{$push:{comments:comment}} );
+                res.status(200).json({"isposted":true});
+            }
+         
+           
+        }
+       
+       
+    );
+        
+    }catch(e)
+    {
+        return res.status(500).json({"mssg":e.message,"filters":filters});
+    }
+
+    //yhaha se real hai 
     // await comment.save();
-    await Post.findOneAndUpdate({_id:req.body.post},{$push:{comments:comment}} );
-    res.send("Comment was added successfully");
 });
 
 
