@@ -5,6 +5,7 @@ const authRouter = require("./routes/auth");
 const postRouter = require("./routes/post");
 const jobsRouter = require("./routes/jobs");
 const schemeRouter = require("./routes/schemes");
+const workshopRouter = require("./routes/workshop");
 
 const PORT= process.env.PORT | 3001;
 const app =express();
