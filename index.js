@@ -18,6 +18,7 @@ app.use(express.json());
 app.use(authRouter);
 app.use(postRouter);
 app.use(jobsRouter);
+app.use(workshopRouter);
 var server =http.createServer(app);
 app.use(schemeRouter);
 server.listen(PORT,"0.0.0.0",()=>{
