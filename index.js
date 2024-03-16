@@ -6,7 +6,7 @@ const postRouter = require("./routes/post");
 const jobsRouter = require("./routes/jobs");
 const schemeRouter = require("./routes/schemes");
 const workshopRouter = require("./routes/workshop");
-
+const audioSentiRouter = require("./routes/audioSentiment");
 const PORT= process.env.PORT | 3001;
 const app =express();
 app.all('*', function(req, res, next) {
@@ -20,6 +20,7 @@ app.use(authRouter);
 app.use(postRouter);
 app.use(jobsRouter);
 app.use(workshopRouter);
+app.use(audioSentiRouter);
 var server =http.createServer(app);
 app.use(schemeRouter);
 server.listen(PORT,"0.0.0.0",()=>{
