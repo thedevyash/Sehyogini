@@ -32,17 +32,8 @@ try{
 console.log(filters);
 
 
-    post=new Post({
-        author:author,
-        authorID:authorID,authorType:authorType,
-        content:content,
-        title:title,
-        comments:comments,
-        likes:likes
-    });
-    post=await post .save();
-   await User.findOneAndUpdate({_id:authorID},{$push:{myposts:post}});
-
+   
+   
    await stub.PostModelOutputs(
     {
         user_app_id: {
@@ -63,7 +54,7 @@ console.log(filters);
         ]
     },
     metadata,
-    (err, response) => {
+    async (err, response) => {
         if (err) {
             throw new Error(err);
         }
@@ -83,7 +74,22 @@ console.log(filters);
             console.log(concept.name + " " + concept.value);
        
         }
-        return  res.status(200).json({"author":author,"postID":post._id,"filters":filters});
+        if(filters['toxic']>0.75)
+        return  res.status(200).json({"isposted":false});
+        else
+        { post=new Post({
+            author:author,
+            authorID:authorID,authorType:authorType,
+            content:content,
+            title:title,
+            comments:comments,
+            likes:likes
+        });
+            post=await post .save();
+            await User.findOneAndUpdate({_id:authorID},{$push:{myposts:post}});
+            return  res.status(200).json({"author":author,"postID":post._id,"isposted":true});
+        }
+     
        
     }
    
