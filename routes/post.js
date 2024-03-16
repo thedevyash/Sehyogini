@@ -8,7 +8,30 @@ const postRouter=express.Router();
 
 postRouter.post('/api/createPost',async(req,res)=>{
 const {title,author,authorID,content,comments,likes,authorType}=req.body;
+var filters={};
+
 try{
+
+    const PAT = 'f0926fb0e98942e6b5037257f571d473';
+
+    const USER_ID = 'clarifai';
+    const APP_ID = 'main';
+    
+    const MODEL_ID = 'moderation-multilingual-text-classification';
+    const MODEL_VERSION_ID = '79c2248564b0465bb96265e0c239352b';
+    const RAW_TEXT = content;
+    const { ClarifaiStub, grpc } = require("clarifai-nodejs-grpc");
+    
+    const stub = ClarifaiStub.grpc();
+    
+    const metadata = new grpc.Metadata();
+    metadata.set("authorization", "Key " + PAT);
+    
+    if(await !filters==null)
+    console.log("outside");
+console.log(filters);
+
+
     post=new Post({
         author:author,
         authorID:authorID,authorType:authorType,
@@ -20,10 +43,56 @@ try{
     post=await post .save();
    await User.findOneAndUpdate({_id:authorID},{$push:{myposts:post}});
 
-    return res.status(200).json({"author":author,"postID":post._id});
+   await stub.PostModelOutputs(
+    {
+        user_app_id: {
+            "user_id": USER_ID,
+            "app_id": APP_ID
+        },
+        model_id: MODEL_ID,
+        version_id: MODEL_VERSION_ID, 
+        inputs: [
+            {
+                "data": {
+                    "text": {
+                        "raw": RAW_TEXT
+
+                    }
+                }
+            }
+        ]
+    },
+    metadata,
+    (err, response) => {
+        if (err) {
+            throw new Error(err);
+        }
+
+        if (response.status.code !== 10000) {
+            throw new Error("Post model outputs failed, status: " + response.status.description);
+        }
+
+        const output = response.outputs[0];
+
+        console.log("Predicted concepts:");
+        for (const concept of output.data.concepts) {
+
+            // filter.set(concept.name,concept.value);
+         filters[concept.name]=concept.value;
+            console.log(filters);
+            console.log(concept.name + " " + concept.value);
+       
+        }
+        return  res.status(200).json({"author":author,"postID":post._id,"filters":filters});
+       
+    }
+   
+   
+);
+    
 }catch(e)
 {
-    return res.status(500).json({"mssg":e.message});
+    return res.status(500).json({"mssg":e.message,"filters":filters});
 }
 });
 
