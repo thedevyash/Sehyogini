@@ -21,8 +21,8 @@ description:{
     type:String,
     require:true,
 },
-details:{
-    type:Map,
+price:{
+    type:String,
     require:true,
 },
 productImage: {
