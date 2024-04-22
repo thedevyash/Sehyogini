@@ -1,5 +1,6 @@
 const express=require("express");
 const Product = require("../models/products");
+const User = require("../models/user");
 const productRouter=express.Router();
 
 productRouter.post('/api/addProduct',async(req,res)=>{
@@ -34,13 +35,16 @@ productRouter.post('/api/addProduct',async(req,res)=>{
      });
 
 
-     productRouter.post('/api/addToCart/:userId/:productId', async (req, res) => {
+     productRouter.post('/api/addToCart', async (req, res) => {
         try {
-          const { userId, productId } = req.params;
-      
+          const { userId, productId } = req.body;
+          console.log(req.body);
           // Find the user
-          const user = await User.findById(userId);
-      
+          const user = await User.findById(userId).catch(error => {
+            console.error(error);
+            return res.status(500).json({ message: 'Error finding user huehue' });
+          });
+    
           // Check if the product is already in the cart
           const cartItem = user.cart.find(item => item.product.toString() === productId);
       
@@ -62,9 +66,9 @@ productRouter.post('/api/addProduct',async(req,res)=>{
       });
 
 
-      productRouter.delete('/api/removeFromCart/:userId/:productId', async (req, res) => {
+      productRouter.delete('/api/removeFromCart', async (req, res) => {
         try {
-          const { userId, productId } = req.params;
+          const { userId, productId } = req.body;
       
           // Find the user
           const user = await User.findById(userId);
