@@ -95,9 +95,9 @@ productRouter.post('/api/addProduct',async(req,res)=>{
 
 
 
-      productRouter.get('/api/getCart', async (req, res) => {
+      productRouter.get('/api/getCart/:userId', async (req, res) => {
         try {
-          const { userId } = req.body;
+          const { userId } = req.params;
       
           // Find the user
           const user = await User.findById(userId).populate('cart.product');
