@@ -45,6 +45,16 @@ followTo:{
     type:Array,
     required:false
 },
+cart: [
+    {
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true
+      },
+      quantity: { type: Number, default: 1 }
+    }
+  ],
 myposts:{
 type:Array,
 required:false

@@ -221,6 +221,7 @@ postRouter.post("/api/do-comment", async (req,res) =>{
             else
             {  // await comment.save();
                 await Post.findOneAndUpdate({_id:req.body.post},{$push:{comments:comment}} );
+                // await User.findOneAndUpdate({})
                 res.status(200).json({"isposted":true});
             }
          
