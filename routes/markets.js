@@ -5,9 +5,9 @@ const productRouter=express.Router();
 
 productRouter.post('/api/addProduct',async(req,res)=>{
     try{
-        const {productName,seller,productCategory,stock,description,price,productImage}=req.body;
+        const {productName,seller,productCategory,stock,image,description,price,productImage}=req.body;
         product= new Product(
-            {productName,seller,productCategory,stock,description,price,productImage});
+            {productName,seller,productCategory,stock,image,description,price,productImage});
           
             // var x=jobcategory;
            

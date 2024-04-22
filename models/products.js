@@ -28,6 +28,10 @@ price:{
 productImage: {
     type: String,
     required: false, // Change this to true if the image is required
+  },
+  image:{
+    type:String,
+    required:false,
   }
 },
 );
