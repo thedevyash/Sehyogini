@@ -93,4 +93,25 @@ productRouter.post('/api/addProduct',async(req,res)=>{
         }
       });
 
+
+
+      productRouter.get('/api/getCart', async (req, res) => {
+        try {
+          const { userId } = req.body;
+      
+          // Find the user
+          const user = await User.findById(userId).populate('cart.product');
+      
+          if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+          }
+      
+          // Return the user's cart
+          res.status(200).json(user.cart);
+        } catch (error) {
+          res.status(500).json({ message: error.message });
+        }
+      });
+
+
     module.exports=productRouter;
