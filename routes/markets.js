@@ -74,11 +74,16 @@ productRouter.post('/api/addProduct',async(req,res)=>{
           const user = await User.findById(userId);
       
           // Find the product in the cart
-          const cartItemIndex = user.cart.findIndex(item => item.product.toString() === productId);
+          const cartItem = user.cart.find(item => item.product.toString() === productId);
       
-          if (cartItemIndex > -1) {
-            // If the product is in the cart, remove it
-            user.cart.splice(cartItemIndex, 1);
+          if (cartItem) {
+            // If the product is in the cart, decrease the quantity
+            cartItem.quantity--;
+      
+            // If the quantity is 0, remove the product from the cart
+            if (cartItem.quantity === 0) {
+              user.cart = user.cart.filter(item => item.product.toString() !== productId);
+            }
           } else {
             // If the product is not in the cart, send an error message
             return res.status(400).json({ message: 'Product not found in cart' });
@@ -87,12 +92,11 @@ productRouter.post('/api/addProduct',async(req,res)=>{
           // Save the updated user
           await user.save();
       
-          res.status(200).json({ message: 'Product removed from cart' });
+          res.status(200).json({ message: 'Product quantity updated' });
         } catch (error) {
           res.status(500).json({ message: error.message });
         }
       });
-
 
 
       productRouter.get('/api/getCart/:userId', async (req, res) => {
