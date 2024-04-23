@@ -74,8 +74,50 @@ console.log(filters);
             console.log(concept.name + " " + concept.value);
        
         }
-        if(filters['toxic']>0.60||filters['insult']>0.50)
-        return  res.status(200).json({"isposted":false});
+        if(filters['threat']>0.60&&filters['toxic']>0.68)
+            {
+                return  res.status(200).json({"isposted":false});
+            }
+            if(filters['insult']>0.70&&filters['obscene']>0.70)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
+           if(filters['insult']>0.70&&filters['toxic']>0.70)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
+           if(filters['toxic']>0.90)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
+           if(filters['insult']>0.90)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
+           if(filters['severe_toxic']>0.90)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
+           if(filters['obscene']>0.90)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
+           if(filters['identity_hate']>0.90)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
+           if(filters['threat']>0.90)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
         else
         { post=new Post({
             author:author,
