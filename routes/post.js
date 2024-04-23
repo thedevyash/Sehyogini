@@ -178,6 +178,8 @@ postRouter.get('/api/getPosts',async(req,res)=>{
     }
     });
 
+
+
 //  postRouter.post('/api/do-comment',async(req,res)=>{
 //     const {id,comment}=req.body;
 //     try{
