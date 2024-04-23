@@ -212,12 +212,55 @@ postRouter.post("/api/do-comment", async (req,res) =>{
             for (const concept of output.data.concepts) {
     
                 // filter.set(concept.name,concept.value);
+                console.log(concept.name + " " + concept.value);
              filters[concept.name]=concept.value;
 
            
             }
-            if(filters['toxic']>0.50||filters['insult']>0.50)
-            return  res.status(200).json({"isposted":false});
+            if(filters['threat']>0.60&&filters['toxic']>0.68)
+            {
+                return  res.status(200).json({"isposted":false});
+            }
+            if(filters['insult']>0.70&&filters['obscene']>0.70)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
+           if(filters['insult']>0.70&&filters['toxic']>0.70)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
+           if(filters['toxic']>0.90)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
+           if(filters['insult']>0.90)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
+           if(filters['severe_toxic']>0.90)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
+           if(filters['obscene']>0.90)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
+           if(filters['identity_hate']>0.90)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
+           if(filters['threat']>0.90)
+       
+           {
+                return  res.status(200).json({"isposted":false});
+           }
             else
             {  // await comment.save();
                 await Post.findOneAndUpdate({_id:req.body.post},{$push:{comments:comment}} );
