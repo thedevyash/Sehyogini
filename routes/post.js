@@ -216,7 +216,7 @@ postRouter.post("/api/do-comment", async (req,res) =>{
 
            
             }
-            if(filters['toxic']>0.60||filters['insult']>0.60)
+            if(filters['toxic']>0.50||filters['insult']>0.50)
             return  res.status(200).json({"isposted":false});
             else
             {  // await comment.save();
