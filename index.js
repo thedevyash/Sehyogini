@@ -29,7 +29,7 @@ app.use(schemeRouter);
 server.listen(PORT,"0.0.0.0",()=>{
     console.log(`server running at ${PORT}`)
 });
-const DB=db;
+const DB="mongodb+srv://ayushtiwari3436:HELLO11@cluster0.wfb2kfd.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose.connect(DB).then(()=>{
     console.log("connection succesful");
