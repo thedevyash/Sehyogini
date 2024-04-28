@@ -1,2 +1,3 @@
 user-aloo
 pswd-vNLpMxTBdm7Z6k6K
+//mongodb+srv://aloo:vNLpMxTBdm7Z6k6K@cluster0.ixkebsc.mongodb.net/?retryWrites=true&w=majority

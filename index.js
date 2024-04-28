@@ -8,6 +8,7 @@ const schemeRouter = require("./routes/schemes");
 const workshopRouter = require("./routes/workshop");
 const marketRouter = require("./routes/markets");
 const audioSentiRouter = require("./routes/audioSentiment");
+const { db } = require("./models/post");
 const PORT= process.env.PORT | 3001;
 const app =express();
 app.all('*', function(req, res, next) {
@@ -28,8 +29,7 @@ app.use(schemeRouter);
 server.listen(PORT,"0.0.0.0",()=>{
     console.log(`server running at ${PORT}`)
 });
-//mongodb+srv://aloo:vNLpMxTBdm7Z6k6K@cluster0.ixkebsc.mongodb.net/?retryWrites=true&w=majority
-const DB="mongodb+srv://ayushtiwari3436:HELLO11@cluster0.wfb2kfd.mongodb.net/?retryWrites=true&w=majority";
+const DB=db;
 
 mongoose.connect(DB).then(()=>{
     console.log("connection succesful");
