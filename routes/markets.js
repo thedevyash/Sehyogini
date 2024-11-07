@@ -3,6 +3,8 @@ const Product = require("../models/products");
 const User = require("../models/user");
 const productRouter=express.Router();
 
+
+
 productRouter.post('/api/addProduct',async(req,res)=>{
     try{
         const {productName,seller,productCategory,stock,image,description,price,productImage}=req.body;
@@ -69,17 +71,13 @@ productRouter.post('/api/addProduct',async(req,res)=>{
       productRouter.delete('/api/removeFromCart', async (req, res) => {
         try {
           const { userId, productId } = req.body;
-      
           // Find the user
           const user = await User.findById(userId);
-      
           // Find the product in the cart
           const cartItem = user.cart.find(item => item.product.toString() === productId);
-      
           if (cartItem) {
             // If the product is in the cart, decrease the quantity
             cartItem.quantity--;
-      
             // If the quantity is 0, remove the product from the cart
             if (cartItem.quantity === 0) {
               user.cart = user.cart.filter(item => item.product.toString() !== productId);
@@ -88,7 +86,6 @@ productRouter.post('/api/addProduct',async(req,res)=>{
             // If the product is not in the cart, send an error message
             return res.status(400).json({ message: 'Product not found in cart' });
           }
-      
           // Save the updated user
           await user.save();
       
